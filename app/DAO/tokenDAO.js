@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import mongoConverter from '../service/mongoConverter';
 import applicationException from '../service/applicationException';
 
-import TokenModel from '../models/token';
+import TokenModel from '../model/tokenModel';
 
 async function create(user) {
   const access = 'auth';

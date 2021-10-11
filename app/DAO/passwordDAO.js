@@ -2,7 +2,7 @@ import applicationException from '../service/applicationException';
 import mongoConverter from '../service/mongoConverter';
 import * as _ from 'lodash';
 
-import PasswordModel from '../models/password';
+import PasswordModel from '../model/passwordModel';
 
 async function createOrUpdate(data) {
   const result = await PasswordModel.findOneAndUpdate({ userId: data.userId }, _.omit(data, 'id'), { new: true });

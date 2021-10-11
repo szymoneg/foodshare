@@ -3,7 +3,7 @@ import mongoConverter from '../service/mongoConverter';
 import Promise from 'bluebird';
 import * as _ from 'lodash';
 
-import UserModel from '../models/user';
+import UserModel from '../model/userModel';
 
 
 function createNewOrUpdate(user) {
