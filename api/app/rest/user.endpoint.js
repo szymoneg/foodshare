@@ -33,7 +33,7 @@ const userEndpoint = {
         validate: {
           payload: validator.createOrUpdateUser.payload
         },
-        auth: 'bearer'
+        auth: false
       },
       handler: async (request, h) => {
         try {

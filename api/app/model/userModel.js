@@ -11,7 +11,7 @@ const userRoles = [userRole.admin, userRole.user];
 const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    surname: { type: String, required: true },
+    surname: { type: String, required: false },
     role: { type: String, enum: userRoles, default: userRole.user, required: false },
     active: { type: Boolean, default: false, required: false },
     isAdmin: { type: Boolean, default: false, required: false },
