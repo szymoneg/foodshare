@@ -3,11 +3,13 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import LoginPage from './pages/login-page/LoginPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter } from 'react-router-dom';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
-  <div>
+  <BrowserRouter>
     <LoginPage/>
-  </div>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
