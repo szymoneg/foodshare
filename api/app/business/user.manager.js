@@ -25,7 +25,11 @@ function create(context) {
     userData = await user;
     await PasswordDAO.authorize(user.id, hashString(password));
     const token = await TokenDAO.create(userData);
-    return getToken(token);
+    return {
+      token: token.value,
+      isAdmin: user.isAdmin,
+      email: user.email,
+    };
   }
 
   function getToken(token) {

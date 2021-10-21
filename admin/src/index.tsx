@@ -5,10 +5,12 @@ import LoginPage from './pages/login-page/LoginPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
+import App from './App';
+
 
 ReactDOM.render(
   <BrowserRouter>
-    <LoginPage/>
+    <App/>
   </BrowserRouter>,
   document.getElementById('root')
 );

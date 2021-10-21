@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import './LoginPage.css'
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useHistory } from 'react-router-dom'
 
 import AuthService from '../../services/auth.service'
 import { RouteComponentProps } from 'react-router';
@@ -21,11 +22,13 @@ type State = {
 }
 
 
-function LoginPage(props: any) {
+function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
+    const history = useHistory();
+
 
     const validationSchema = () => {
         return Yup.object().shape({
@@ -42,7 +45,7 @@ function LoginPage(props: any) {
 
         AuthService.login(email, password).then(
             () => {
-                props.history.push("/profile");
+                history.push("/main-page");
                 window.location.reload();
             },
             err => {
