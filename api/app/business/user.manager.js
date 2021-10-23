@@ -26,6 +26,7 @@ function create(context) {
     await PasswordDAO.authorize(user.id, hashString(password));
     const token = await TokenDAO.create(userData);
     return {
+      id: user.id,
       token: token.value,
       isAdmin: user.isAdmin,
       email: user.email,
@@ -82,6 +83,10 @@ function create(context) {
 
   }
 
+  async function getUserById(id){
+    return await UserDAO.get(id);
+  }
+
   return {
     authenticate: authenticate,
     getUserByToken: getUserByToken,
@@ -90,7 +95,8 @@ function create(context) {
     removeUserById: removeUserById,
     activateUser: activateUser,
     removeHashSession: removeHashSession,
-    checkEmailAvailability: checkEmailAvailability
+    checkEmailAvailability: checkEmailAvailability,
+    getUserById: getUserById
   };
 }
 

@@ -1,108 +1,113 @@
-import { Component, useState } from "react";
-import { Redirect } from "react-router-dom";
+import { useEffect, useState } from "react";
 import AuthService from "../../services/auth.service";
 import { UserModel } from "./models/UserModel";
 import mainPageService from "./services/main-page.service";
-import { useHistory } from 'react-router-dom'
-
-type Props = {};
-
-type State = {
-  redirect: string | null;
-  userReady: boolean;
-  currentUser: UserModel & { token: string };
-}
-
-// function ProfilePage(){
-//   const [redirect, setRedirect] = useState('');
-//   const [userReady, setUserReady] = useState(false);
+import { useHistory, withRouter } from 'react-router-dom'
+import "./MainPageStyle.css"
 
 
-//   return(
-//     <></>
-//   )
-// }
+const ProfilePage: React.FC<any> = () => {
+  const [redirect, setRedirect] = useState('');
+  const [userReady, setUserReady] = useState(false);
+  const [currentUser, setCurrentUser] = useState<Partial<UserModel>>({});
+  const [users, setUsers] = useState<UserModel[] | []>([]);
 
-// export default ProfilePage;
+  let history = useHistory();
 
-
-export default class ProfilePage extends Component<Props, State>{
-  constructor(props: Props) {
-    super(props);
-
-    this.state = {
-      redirect: null,
-      userReady: false,
-      currentUser: { token: "" },
-    };
-  }
-
-  componentDidMount() {
+  useEffect(() => {
     const currentUser = AuthService.getCurrentUser();
 
-    if (!currentUser || currentUser.isAdmin === 'false') {
-      this.setState({ redirect: "/login" });
+    if (!currentUser) {
+      history.push('/login')
+      window.location.reload();
+    } else {
+      getAllUsers(currentUser.token);
+      setUserReady(true);
     }
+  }, [])
 
-    mainPageService.getAllUsers(currentUser.token).then(
-      (response)=>{
-        console.log(response[0]);
+  const getAllUsers = (token: string) => {
+    mainPageService.getAllUsers(token).then(
+      (response) => {
+        response.map((response: UserModel) => {
+          setUsers(prevItems => [...prevItems, {
+            id: response.id,
+            email: response.email,
+            isAdmin: response.isAdmin,
+            name: response.name,
+          }]);
+        })
       },
       err => {
         console.log(err);
       }
     );
+  }
 
-    this.setState({
-      currentUser: currentUser,
-      userReady: true
+  const handleLogout = () => {
+    history.push('/login')
+    AuthService.logout();
+  }
+
+  const handleEdit = (id: any) => {
+    history.push({
+      pathname: `/details/${id}`,
+      state: { id: id }
     })
   }
 
-  handleLogout() {
-    AuthService.logout();
-    window.location.reload();
-    this.setState({ redirect: "/login" });
+  const handleAdd = () => {
+    history.push({
+      pathname: "/add"
+    })
   }
 
-  render() {
-    if (this.state.redirect) {
-      return <Redirect to={this.state.redirect} />
-    }
-
-    const { currentUser } = this.state;
-
-    return (
-      <div>
-        {(this.state.userReady) ?
-          <div>
-            <nav className="navbar navbar-light bg-light">
-              <span className="navbar-text">
-                {currentUser.email}
-              </span>
-              <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={() => this.handleLogout()}>Wyloguj!</button>
-            </nav>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">First</th>
-                  <th scope="col">Last</th>
-                  <th scope="col">Handle</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">12</th>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          : null}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {(userReady) ?
+        <div>
+          <nav className="navbar navbar-light bg-light">
+            <span className="navbar-text">
+              {currentUser.email}
+            </span>
+            <div className="btn-group">
+              <button className="btn btn-outline-primary" type="submit" onClick={() => handleAdd()}>Dodaj nowego użytkownika!</button>
+              <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={() => handleLogout()}>Wyloguj!</button>
+            </div>
+          </nav>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Email</th>
+                <th scope="col">Name</th>
+                <th scope="col" className="centerColumn">Admin</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((object) => <tr key={object.id}>
+                <th>{object.id}</th>
+                <td>{object.email}</td>
+                <td>{object.name}</td>
+                <td className="centerColumn">{object.isAdmin === true ? <i className="bi bi-check"></i> : <i className="bi bi-x"></i>}</td>
+                <td><button className="btn btn-warning" onClick={() => handleEdit(object?.id)}>edytuj</button></td>
+              </tr>)}
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li className="page-item"><a className="page-link" href="#">Previous</a></li>
+              <li className="page-item"><a className="page-link" href="#">1</a></li>
+              <li className="page-item"><a className="page-link" href="#">2</a></li>
+              <li className="page-item"><a className="page-link" href="#">3</a></li>
+              <li className="page-item"><a className="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+        : null}
+    </div>
+  )
 }
+
+export default withRouter(ProfilePage);

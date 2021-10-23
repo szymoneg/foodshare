@@ -160,6 +160,24 @@ const userEndpoint = {
       }
     });
 
+    server.route({
+      method: 'GET',
+      path: '/api/user/id/{id}',
+      options: {
+        description: 'Get user by id',
+        tags: ['api'],
+        validate: {},
+        auth: 'bearer'
+      },
+      handler: async (request, h) => {
+        try {
+          return business.getUserManager(request).getUserById(request.params.id);
+        } catch (err) {
+          return applicationException.errorHandler(err, h);
+        }
+      }
+    });
+
   },
   tag: {
     name: 'user',

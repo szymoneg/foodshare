@@ -1,5 +1,6 @@
 import { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import LoginPage from "./pages/login-page/LoginPage";
 import ProfilePage from "./pages/main-page/ProfilePage";
 import TestPage from "./pages/test-page/TestPage";
@@ -10,6 +11,7 @@ import {
     Route,
     Link
 } from "react-router-dom";
+import DetailPage from "./pages/main-page/DetailPage";
 
 function App(): JSX.Element {
     return <div>
@@ -23,6 +25,9 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/main-page">
                     <ProfilePage />
+                </Route>
+                <Route path="/details/:id">
+                    <DetailPage />
                 </Route>
             </Switch>
         </Router>
