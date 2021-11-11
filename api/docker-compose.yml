@@ -1,0 +1,17 @@
+version: '3'
+services:
+  # api:
+  #   container_name: api
+  #   image: latest123/foodshare-api
+  #   restart: always
+  #   build: .
+  #   ports: 
+  #     - "7500:7500"
+  #   links: 
+  #     - mongo
+  mongo:
+    image: mongo:3.4.23
+    volumes:
+      - /tmp/mongo:/data/db
+    ports:
+      - "27017:27017"
