@@ -1,19 +1,14 @@
-version: '2'
+version: '3'
 services:
-  # admin:
-  #   build:
-  #     context: ./api
-  #   ports:
-  #     - "3000:3000"
-  #   stdin_open: true
-  #   volumes:
-  #     - ./admin
-  # node:
+  # api:
+  #   container_name: api
+  #   image: latest123/foodshare-api
+  #   restart: always
   #   build: .
-  #   ports:
-  #     - 80:3000
-  #   volumes:
-  #     - ./:/code
+  #   ports: 
+  #     - "7500:7500"
+  #   links: 
+  #     - mongo
   mongo:
     image: mongo:3.4.23
     volumes:
