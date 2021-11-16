@@ -10,7 +10,7 @@ import routes from './rest/routes';
 import Vision from 'vision';
 
 mongoose.Promise = bluebird;
-mongoose.connect(config.databaseUrl, { useNewUrlParser: true, useCreateIndex: true }, (error) => {
+mongoose.connect(config.databaseUrl, (error) => {
   if (error) {
     console.error(error);
   } else {
@@ -28,7 +28,10 @@ process.on('SIGINT', () => {
 const start = async () => {
 
   const server = new Hapi.server({
-    port: config.port
+    port: config.port,
+    "routes": {
+      "cors": true
+    }
   });
 
   const swaggerOptions = {
