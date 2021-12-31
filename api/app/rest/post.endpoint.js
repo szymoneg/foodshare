@@ -9,7 +9,7 @@ const postEndpoint = {
             method: 'POST',
             path: '/api/posts',
             options: {
-                description: 'Get all books',
+                description: 'Get all posts',
                 tags: ['api'],
                 validate: {},
                 auth: false
@@ -47,10 +47,24 @@ const postEndpoint = {
             }
         });
 
-        // server.route({
-        //     method: 'GET',
-        //     path: '/api/post/{id}'
-        // })
+        server.route({
+            method: 'POST',
+            path: '/api/comment',
+            options: {
+                description: 'Create new comment',
+                tags: ['api'],
+                validate: {
+                },
+                auth: false
+            },
+            handler: async(request, h) => {
+                try{
+                    return await business.getPostManager(request).addComment(request);
+                }catch(error){
+                    return applicationException.errorHandler(error, h);
+                }
+            }
+        });
     }
 }
 

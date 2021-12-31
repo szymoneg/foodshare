@@ -4,31 +4,43 @@ import UserModel from '../model/userModel'
 import PostModel from '../model/postModel'
 
 import * as _ from 'lodash';
-import { upload } from '../service/upload'
+import {upload} from '../service/upload'
+import * as assert from "assert";
+
 const fs = require('fs')
 const inert = require('@hapi/inert')
 
-async function getAll(request){
+async function getAll(request) {
     let pageSize = request.page
 
     const result = PostModel.find()
-        .limit(pageSize)
-
-    if(result){
+        .populate({
+            path: 'user',
+            select: 'email'
+        })
+        .populate([{
+            path: 'comments',
+            select: 'comment',
+            populate: {
+                path: 'user',
+                select: 'email'
+            }
+        }])
+    if (result) {
         return result;
     }
     throw applicationException.new(applicationException.NOT_FOUND, 'Post not found');
 }
 
 async function createPost(request) {
-    if(request){
-        const { payload } = request;
-        const pathToImage = `./app/uploads/${+ new Date()}.png`;
+    if (request) {
+        const {payload} = request;
+        const pathToImage = `./app/uploads/${+new Date()}.png`;
         const data = payload.file._data;
-        const user = await UserModel.findOne({ email: payload.email });
+        const user = await UserModel.findOne({email: payload.email});
 
         fs.writeFile(pathToImage, data, err => {
-            if(err){
+            if (err) {
                 console.log(err)
             }
             return "ok";
@@ -36,7 +48,7 @@ async function createPost(request) {
 
         let newPost = upload(pathToImage).then(response => {
             fs.unlink(pathToImage, (err) => {
-                if(err){
+                if (err) {
                     console.log(err);
                 }
             })
@@ -49,7 +61,7 @@ async function createPost(request) {
 
             return new PostModel(newPost).save().then(result => {
                 if (result) {
-                  return mongoConverter(result);
+                    return mongoConverter(result);
                 }
             });
         });
@@ -60,7 +72,7 @@ async function createPost(request) {
     throw applicationException.new(applicationException.ERROR, 'Cannot create new post');
 }
 
-export default{
+export default {
     getAll: getAll,
     createPost: createPost,
 };

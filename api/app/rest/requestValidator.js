@@ -13,6 +13,7 @@ export default{
           email: Joi.string(),
           password: Joi.string(),
           name: Joi.string(),
+          username: Joi.string(),
           surname: Joi.string(),
           address: Joi.string(),
           postCode: Joi.string(),

@@ -30,6 +30,7 @@ function create(context) {
       token: token.value,
       isAdmin: user.isAdmin,
       email: user.email,
+      username: user.username,
     };
   }
 
@@ -80,7 +81,13 @@ function create(context) {
     if (user) {
       return !(_.filter(user, { 'email': email }).length);
     }
+  }
 
+  async function checkUsernameAvailability(username) {
+    const user = await UserDAO.checkAvailability(username);
+    if (user) {
+      return !(_.filter(username, { 'username': username }).length);
+    }
   }
 
   async function getUserById(id){
@@ -96,6 +103,7 @@ function create(context) {
     activateUser: activateUser,
     removeHashSession: removeHashSession,
     checkEmailAvailability: checkEmailAvailability,
+    checkUsernameAvailability: checkUsernameAvailability, 
     getUserById: getUserById
   };
 }
