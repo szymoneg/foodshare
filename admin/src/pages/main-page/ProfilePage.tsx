@@ -62,6 +62,12 @@ const ProfilePage: React.FC<any> = () => {
     })
   }
 
+  const handleShowLog = () => {
+    history.push({
+      pathname: "/logs"
+    })
+  }
+
   return (
     <div>
       {(userReady) ?
@@ -72,6 +78,7 @@ const ProfilePage: React.FC<any> = () => {
             </span>
             <div className="btn-group">
               <button className="btn btn-outline-primary" type="submit" onClick={() => handleAdd()}>Dodaj nowego użytkownika!</button>
+              <button className="btn btn-outline-info my-2 my-sm-0" type="submit" onClick={() => handleShowLog()}>Logi serwerowe</button>
               <button className="btn btn-outline-success my-2 my-sm-0" type="submit" onClick={() => handleLogout()}>Wyloguj!</button>
             </div>
           </nav>
@@ -91,7 +98,12 @@ const ProfilePage: React.FC<any> = () => {
                 <td>{object.email}</td>
                 <td>{object.name}</td>
                 <td className="centerColumn">{object.isAdmin === true ? <i className="bi bi-check"></i> : <i className="bi bi-x"></i>}</td>
-                <td><button className="btn btn-warning" onClick={() => handleEdit(object?.id)}>edytuj</button></td>
+                <td>
+                  <div className="btn-group">
+                    <button className="btn btn-warning" onClick={() => handleEdit(object?.id)}>Edytuj</button>
+                    <button className="btn btn-danger" onClick={() => handleEdit(object?.id)}>Usuń</button>
+                  </div>
+                </td>
               </tr>)}
             </tbody>
           </table>

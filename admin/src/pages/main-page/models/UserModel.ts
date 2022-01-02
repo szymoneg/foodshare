@@ -1,6 +1,6 @@
 export interface UserModel{
     id?: string;
-    activet?: boolean;
+    active?: boolean;
     email?: string;
     isAdmin?: boolean;
     name?: string;

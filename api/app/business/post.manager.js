@@ -7,6 +7,10 @@ function create(request){
         return await postDAO.getAll(request);
     }
 
+    async function getPost(request){
+        return await  postDAO.getPost(request)
+    }
+
     async function createPost(request) {
         return await postDAO.createPost(request);
     }
@@ -15,10 +19,16 @@ function create(request){
         return await commentDAO.addComment(request);
     }
 
+    async function deletePost(request){
+        return await  postDAO.deletePost(request);
+    }
+
     return{
         getAll: getAll,
+        getPost: getPost,
         createPost: createPost,
-        addComment: addComment
+        addComment: addComment,
+        deletePost: deletePost
     }
 }
 

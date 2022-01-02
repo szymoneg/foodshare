@@ -1,14 +1,6 @@
-import applicationException from "../service/applicationException";
-import mongoConverter from "../service/mongoConverter";
 import UserModel from "../model/userModel";
 import PostModel from "../model/postModel";
 import CommentModel from "../model/commentModel";
-
-import * as _ from "lodash";
-import {upload} from "../service/upload";
-
-const fs = require("fs");
-const inert = require("@hapi/inert");
 
 async function addComment(request) {
     if (request) {
