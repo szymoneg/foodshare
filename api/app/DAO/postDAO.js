@@ -119,11 +119,33 @@ async function deletePost(request) {
 }
 
 async function addLick(request) {
+    const { payload } = request;
+    const post = await PostModel.findOne({_id: payload.post})
+    const lickedBy = await UserModel.findOne({username: payload.username})
 
+    console.log(lickedBy._id)
+
+    if (post.likes.includes(lickedBy._id)){
+        throw applicationException.new(applicationException.ERROR, 'Post already licked by this user')
+    }
+    await PostModel.updateOne({_id: payload.post}, {
+        $push: {likes: lickedBy._id},
+    });
+    return "ok"
 }
 
 async function removeLick(request) {
+    const { payload } = request;
+    const post = await PostModel.findOne({_id: payload.post})
+    const lickedBy = await UserModel.findOne({username: payload.username})
 
+    if (post.likes.includes(lickedBy._id)){
+        await PostModel.updateOne({_id: payload.post}, {
+            $pull: {likes: lickedBy._id},
+        });
+        return "ok"
+    }
+    throw applicationException.new(applicationException.ERROR, 'This user dont licked this post yet')
 }
 
 
@@ -131,5 +153,7 @@ export default {
     getAll: getAll,
     getPost: getPost,
     createPost: createPost,
-    deletePost: deletePost
+    deletePost: deletePost,
+    addLick: addLick,
+    removeLick: removeLick
 };

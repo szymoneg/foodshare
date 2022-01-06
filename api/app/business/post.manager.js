@@ -19,8 +19,20 @@ function create(request){
         return await commentDAO.addComment(request);
     }
 
+    async function deleteComment(request){
+        return await commentDAO.deleteComment(request);
+    }
+
     async function deletePost(request){
         return await  postDAO.deletePost(request);
+    }
+
+    async function addLick(request){
+        return await postDAO.addLick(request);
+    }
+
+    async function removeLick(request){
+        return await postDAO.removeLick(request)
     }
 
     return{
@@ -28,7 +40,10 @@ function create(request){
         getPost: getPost,
         createPost: createPost,
         addComment: addComment,
-        deletePost: deletePost
+        deleteComment: deleteComment,
+        deletePost: deletePost,
+        addLick: addLick,
+        removeLick: removeLick
     }
 }
 

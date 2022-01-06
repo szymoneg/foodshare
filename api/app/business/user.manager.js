@@ -94,6 +94,18 @@ function create(context) {
     return await UserDAO.get(id);
   }
 
+  async function updateUser(request){
+    return await UserDAO.updateUser(request);
+  }
+
+  async function getUserByUsername(username){
+    return await UserDAO.getUserByUsername(username)
+  }
+
+  async function activateUserById(id){
+    return await UserDAO.activateUserById(id)
+  }
+
   return {
     authenticate: authenticate,
     getUserByToken: getUserByToken,
@@ -103,8 +115,11 @@ function create(context) {
     activateUser: activateUser,
     removeHashSession: removeHashSession,
     checkEmailAvailability: checkEmailAvailability,
-    checkUsernameAvailability: checkUsernameAvailability, 
-    getUserById: getUserById
+    checkUsernameAvailability: checkUsernameAvailability,
+    updateUser: updateUser,
+    getUserById: getUserById,
+    getUserByUsername: getUserByUsername,
+    activateUserById: activateUserById
   };
 }
 
