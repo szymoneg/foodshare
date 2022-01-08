@@ -35,8 +35,8 @@ const start = async () => {
 
     const swaggerOptions = {
         info: {
-            title: 'MY API',
-            version: '1.0'
+            title: 'Foodshare - API',
+            version: '1.0',
         }
     };
 
@@ -47,7 +47,7 @@ const start = async () => {
         {
             plugin: require('hapi-cors'),
             options: {
-                origins: ['http://localhost:4200'],
+                origins: ['http://localhost:4200/api'],
                 methods: ['POST, GET, PATCH, PUT, DELETE'],
                 headers: ['Accept', 'Content-Type', 'Authorization']
             }

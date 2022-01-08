@@ -3,12 +3,14 @@ import business from '../business/business.container';
 import validator from './requestValidator';
 const fs = require('fs')
 const log4js = require('log4js')
+const jsonLayout = require('log4js-json-layout')
 
+log4js.addLayout('json', jsonLayout)
 log4js.configure({
-    appenders: { 'file': { type: 'file', filename: 'logs/logs.log' } },
+    appenders: { 'file': { type: 'file', filename: 'logs/logs.log', layout: {type: 'json'} } },
     categories: { default: { appenders: ['file'], level: 'debug' } }
 });
-const logger = log4js.getLogger("cheese");
+const logger = log4js.getLogger("POST-API");
 logger.level = 'debug'
 
 const postEndpoint = {
@@ -179,6 +181,26 @@ const postEndpoint = {
                     return await business.getPostManager(request).removeLick(request);
                 }catch(error){
                     logger.error("Remove lick - error")
+                    return applicationException.errorHandler(error, h);
+                }
+            }
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/api/post/user-posts/{username}',
+            options: {
+                description: 'Get user posts',
+                tags: ['api'],
+                validate: {},
+                auth: false
+            },
+            handler: async(request, h) => {
+                try{
+                    logger.info("Get user posts")
+                    return await business.getPostManager(request).getUserPost(request.params);
+                }catch(error){
+                    logger.error("Get user posts - error")
                     return applicationException.errorHandler(error, h);
                 }
             }

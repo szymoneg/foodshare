@@ -1,11 +1,9 @@
 const fs = require('fs')
 
 async function getLogs(request){
-    let text = fs.readFileSync('../api/logs/logs.log').toString('utf-8');
+    let text = fs.readFileSync('../api/logs/logs.log');
 
-    // let logsArr = text.replace(/\\/g,"").split("\n");
-    // logsArr.map(i => i.replace(/\\/g, ""))
-    return text;
+    return JSON.parse(text);
 }
 
 export default {

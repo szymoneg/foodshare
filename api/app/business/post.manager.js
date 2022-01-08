@@ -35,6 +35,10 @@ function create(request){
         return await postDAO.removeLick(request)
     }
 
+    async function getUserPost(request){
+        return await postDAO.getUserPost(request)
+    }
+
     return{
         getAll: getAll,
         getPost: getPost,
@@ -43,7 +47,8 @@ function create(request){
         deleteComment: deleteComment,
         deletePost: deletePost,
         addLick: addLick,
-        removeLick: removeLick
+        removeLick: removeLick,
+        getUserPost: getUserPost
     }
 }
 

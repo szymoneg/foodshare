@@ -148,6 +148,20 @@ async function removeLick(request) {
     throw applicationException.new(applicationException.ERROR, 'This user dont licked this post yet')
 }
 
+async function getUserPost(request){
+    const {username} = request;
+
+    const user = await UserModel.findOne({username: username})
+    const post = await PostModel.find({user: user._id}).populate({
+        path: 'user',
+        select: 'username email'
+    })
+    if (post){
+        return post;
+    }
+    throw applicationException.new(applicationException.ERROR, 'Dont find any posts')
+}
+
 
 export default {
     getAll: getAll,
@@ -155,5 +169,6 @@ export default {
     createPost: createPost,
     deletePost: deletePost,
     addLick: addLick,
-    removeLick: removeLick
+    removeLick: removeLick,
+    getUserPost: getUserPost
 };
