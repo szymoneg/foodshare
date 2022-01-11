@@ -1,6 +1,4 @@
 # Aplikacja - foodshare
-![](https://img.shields.io/badge/hapi-v20.1.5-yellowgreen)
-![](https://img.shields.io/badge/node-v14.15.5-brightgreen)
 
 ## Opis tematu (zakres pracy): 
 Temat pracy zakłada stworzenie systemu społecznościowego do udostępniania zdjęć potraw/posiłków/napojów wraz z ich opisem. 
@@ -15,13 +13,24 @@ Ponadto, system powinien umożliwiać analizę danych dotyczących zainteresowa�
 - baza danych MongoDB 
 - JavaScript, TypeScript
 
-## Taski
+## Jak uruchomić projekt
+- Zainstalowany npm and nodemon (_npm install -g nodemon_)
+- Zainstalowany Docker
 
-- [x] Połącznie z MongoDB
-- [x] Prosty CRUD
-- [ ] Zabezpieczenia
-    - [ ] JWT
-    - [ ] Wyjątki
-- [ ] Upload plików
-- [ ] Rejestracja z szyfrowaniem
-- [ ] ...
+### Uruchomienie projektu
+```
+cd /api
+npm install
+docker-compose up
+nodemon app
+```
+W terminalu powinna ukazać się lista punktów końcowych wraz z informacją że serwer nasłuchuje na porcie 3000
+
+### Testy
+```
+cd /api
+npm test
+```
+
+### Uruchomienie aplikacji
+Część kliencka napisana jest w technologi React-Native wymaga to posiadanie aktualnej wersji aplikacji, o wersje należy zapytać developera.
