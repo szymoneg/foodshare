@@ -6,6 +6,11 @@ async function getLogs(request){
     return JSON.parse(text);
 }
 
+async function editUser(request){
+
+}
+
 export default {
-    getLogs: getLogs
+    getLogs: getLogs,
+    editUser: editUser
 }

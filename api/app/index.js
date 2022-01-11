@@ -4,7 +4,7 @@ import config from './config';
 import HapiSwagger from 'hapi-swagger';
 import Inert from 'inert';
 import bluebird from 'bluebird';
-import mongoose from 'mongoose';
+import mongoose, {models} from 'mongoose';
 import routes from './rest/routes';
 import Vision from 'vision';
 
@@ -24,22 +24,33 @@ process.on('SIGINT', () => {
     });
 });
 
+const server = new Hapi.server({
+    port: config.port,
+    host: 'localhost',
+    'routes': {
+        'cors': true
+    }
+});
+
+const swaggerOptions = {
+    info: {
+        title: 'Foodshare - API',
+        version: '1.0'
+    }
+};
+//
+// server.route({
+//     method: 'GET',
+//     path: '/{param*}',
+//     config: {
+//         auth: false
+//     },
+//     handler: {
+//         file: 'public/index.html'
+//     }
+// });
+
 const start = async () => {
-
-    const server = new Hapi.server({
-        port: config.port,
-        "routes": {
-            "cors": true
-        }
-    });
-
-    const swaggerOptions = {
-        info: {
-            title: 'Foodshare - API',
-            version: '1.0',
-        }
-    };
-
     await server.register([
         Blipp,
         Inert,
@@ -57,26 +68,18 @@ const start = async () => {
             options: swaggerOptions
         }
     ]);
+    server.start();
+    await routes.secureRoutes(server);
+    await routes.register(server);
+    console.info(`Server is listening on ${config.port}`);
+}
 
-    server.route({
-        method: 'GET',
-        path: '/{param*}',
-        config: {
-            auth: false
-        },
-        handler: {
-            file: 'public/index.html'
-        }
-    });
+process.on('unhandledRejection', (err) => {
 
-    try {
-        await routes.secureRoutes(server);
-        await routes.register(server);
-        await server.start();
-        console.info(`Server is listening on ${config.port}`);
-    } catch (err) {
-        console.error(err);
-    }
-};
+    console.log(err);
+    process.exit(1);
+});
 
 start();
+
+module.exports = server;

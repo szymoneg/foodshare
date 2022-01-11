@@ -33,12 +33,12 @@ async function getAll(request) {
 async function getPost(request) {
     const {id} = request;
 
-    const post = PostModel.findOne({_id: id})
-        .populate({
+    const post = await PostModel.findOne({_id: id})
+        ?.populate({
             path: 'user',
             select: 'username email'
         })
-        .populate([{
+        ?.populate([{
             path: 'comments',
             select: 'comment',
             populate: {
@@ -50,6 +50,8 @@ async function getPost(request) {
     if (post){
         return post;
     }
+
+    // throw new Error("post not found")
 
     throw applicationException.new(applicationException.NOT_FOUND, "post not found")
 }
@@ -98,7 +100,7 @@ async function deletePost(request) {
     if (request) {
         const {payload} = request;
 
-        const postToDelete = await PostModel.findOne({_id: payload.id}).populate({
+        const postToDelete = await PostModel.findOne({_id: payload.id})?.populate({
             path: 'user',
             select: 'username email'
         })

@@ -6,8 +6,13 @@ function getInfo(request){
        return await serverInfoDAO.getLogs(request)
    }
 
+   async function editUser(request){
+       return await serverInfoDAO.editUser(request)
+   }
+
     return{
-        getLogs: getLogs
+        getLogs: getLogs,
+        editUser: editUser
     }
 }
 

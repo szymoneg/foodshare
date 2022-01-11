@@ -111,7 +111,7 @@ async function updateUser(request){
 async function getUserByUsername(username){
   const result = await UserModel.findOne({ username: username });
   if (result) {
-    return mongoConverter(result);
+    return result;
   }
   throw applicationException.new(applicationException.NOT_FOUND, 'User not found');
 }

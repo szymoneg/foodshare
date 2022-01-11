@@ -214,7 +214,7 @@ const userEndpoint = {
         description: 'Get user by username',
         tags: ['api'],
         validate: {},
-        auth: 'bearer'
+        auth: false
       },
       handler: async (request, h) => {
         try {
