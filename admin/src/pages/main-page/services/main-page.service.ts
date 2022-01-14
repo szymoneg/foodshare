@@ -23,6 +23,10 @@ class MainPageService{
             });
         return response.data;
     }
+
+    async getServerLogs(token: string){
+        console.log("logi servera")
+    }
 }
 
 export default new MainPageService();

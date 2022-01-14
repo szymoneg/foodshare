@@ -1,2 +1,2 @@
-require('babel-core/register');
-require('./app/index')
+require('@babel/register');
+require('./app/index');

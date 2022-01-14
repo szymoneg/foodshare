@@ -2,15 +2,39 @@ import applicationException from '../service/applicationException';
 import mongoConverter from '../service/mongoConverter';
 import Promise from 'bluebird';
 import * as _ from 'lodash';
-
 import UserModel from '../model/userModel';
+require('dotenv').config()
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.MAIL_SENDER_MAIL,
+    pass: process.env.MAIL_SENDER_PASSWORD
+  }
+});
 
 function createNewOrUpdate(user) {
   return Promise.resolve().then(() => {
     if (!user.id) {
       return new UserModel(user).save().then(result => {
         if (result) {
+          console.log(result)
+          let mailOptions = {
+            from: process.env.MAIL_SENDER_MAIL,
+            to: user.email,
+            subject: 'Rejestracja w systemie Foodshare',
+            html: `<h4>Witaj ${user.username} w Foodshare!</h4> <br> Link do aktywacji konta https://localhost:3003/api/user/activate/${result.activationHash}`
+          }
+
+          transporter.sendMail(mailOptions, function (err, info) {
+            if (err) {
+              throw applicationException.new(applicationException.BAD_REQUEST, err.message);
+            } else {
+
+            }
+          })
           return mongoConverter(result);
         }
       });
@@ -35,7 +59,7 @@ async function getByEmail(name) {
 }
 
 async function getUserByActivationHash(hash) {
-  const user = await UserModel.find({ activationHash: hash });
+  const user = await UserModel.findOne({ activationHash: hash });
   if (user) {
     return mongoConverter(user);
   }
@@ -69,6 +93,29 @@ async function checkAvailability() {
   }
 }
 
+async function updateUser(request){
+  const { payload } = request;
+  const user = UserModel.findOne({username: payload.username});
+  if (user){
+    await UserModel.updateOne({username: payload.username},{
+      name: payload.name,
+      surname: payload.surname,
+      email: payload.email
+    })
+    return "ok"
+  }else{
+    throw applicationException.new(applicationException.NOT_FOUND, 'Users not found');
+  }
+}
+
+async function getUserByUsername(username){
+  const result = await UserModel.findOne({ username: username });
+  if (result) {
+    return result;
+  }
+  throw applicationException.new(applicationException.NOT_FOUND, 'User not found');
+}
+
 export default {
   createNewOrUpdate: createNewOrUpdate,
   getByEmail: getByEmail,
@@ -76,5 +123,7 @@ export default {
   get: get,
   getAllUsers: getAllUsers,
   removeById: removeById,
-  checkAvailability: checkAvailability
+  checkAvailability: checkAvailability,
+  updateUser: updateUser,
+  getUserByUsername: getUserByUsername,
 };

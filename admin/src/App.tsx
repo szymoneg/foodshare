@@ -12,6 +12,7 @@ import {
     Link
 } from "react-router-dom";
 import DetailPage from "./pages/main-page/DetailPage";
+import LogsPage from "./pages/main-page/LogsPage";
 
 function App(): JSX.Element {
     return <div>
@@ -28,6 +29,9 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/details/:id">
                     <DetailPage />
+                </Route>
+                <Route path="/logs">
+                    <LogsPage />
                 </Route>
             </Switch>
         </Router>

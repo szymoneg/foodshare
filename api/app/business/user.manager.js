@@ -30,6 +30,7 @@ function create(context) {
       token: token.value,
       isAdmin: user.isAdmin,
       email: user.email,
+      username: user.username,
     };
   }
 
@@ -80,11 +81,29 @@ function create(context) {
     if (user) {
       return !(_.filter(user, { 'email': email }).length);
     }
+  }
 
+  async function checkUsernameAvailability(username) {
+    const user = await UserDAO.checkAvailability(username);
+    if (user) {
+      return !(_.filter(username, { 'username': username }).length);
+    }
   }
 
   async function getUserById(id){
     return await UserDAO.get(id);
+  }
+
+  async function updateUser(request){
+    return await UserDAO.updateUser(request);
+  }
+
+  async function getUserByUsername(username){
+    return await UserDAO.getUserByUsername(username)
+  }
+
+  async function activateUserById(id){
+    return await UserDAO.activateUserById(id)
   }
 
   return {
@@ -96,7 +115,11 @@ function create(context) {
     activateUser: activateUser,
     removeHashSession: removeHashSession,
     checkEmailAvailability: checkEmailAvailability,
-    getUserById: getUserById
+    checkUsernameAvailability: checkUsernameAvailability,
+    updateUser: updateUser,
+    getUserById: getUserById,
+    getUserByUsername: getUserByUsername,
+    activateUserById: activateUserById
   };
 }
 

@@ -1,5 +1,6 @@
 import subjectManager from './post.manager';
 import userManager from './user.manager';
+import serverInfoManager from './serverInfo.manager';
 
 function getContext(request) {
     return { user: request && request.user };
@@ -11,5 +12,6 @@ function getter(manager) {
 
 export default{
     getUserManager: getter(userManager),
-    getPostManager: getter(subjectManager)
-}
+    getPostManager: getter(subjectManager),
+    getServerManager: getter(serverInfoManager)
+};
