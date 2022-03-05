@@ -15,7 +15,7 @@ function create(context) {
 
   async function authenticate(name, password) {
     let userData;
-    const user = await UserDAO.getByEmail(name);
+    const user = await UserDAO.getUserByUsername(name);
     if (!user) {
       throw applicationException.new(applicationException.UNAUTHORIZED, 'User with that email does not exist');
     }

@@ -1,26 +1,10 @@
-import { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import {useState} from 'react';
 import './LoginPage.css'
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import { useHistory } from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 import AuthService from '../../services/auth.service'
-import { RouteComponentProps } from 'react-router';
-
-interface RouterProps {
-    history: string;
-}
-
-type Props = RouteComponentProps<RouterProps>;
-
-type State = {
-    email: string,
-    password: string,
-    loading: boolean,
-    message: string
-}
-
 
 function LoginPage() {
     const [email, setEmail] = useState('');
@@ -32,13 +16,13 @@ function LoginPage() {
 
     const validationSchema = () => {
         return Yup.object().shape({
-            email: Yup.string().required("This field is required"),
-            password: Yup.string().required("This field is required"),
+            email: Yup.string().required("To pole jest wymagane!"),
+            password: Yup.string().required("To pole jest wymagane!"),
         });
     }
 
     const handleLogin = (formValue: { email: string; password: string; }) => {
-        const { email, password } = formValue;
+        const {email, password} = formValue;
 
         setLoading(true);
         setMessage('');
@@ -60,46 +44,49 @@ function LoginPage() {
     }
 
     return (
-        <div className="col-md-12">
-            <div className="card card-container">
-                <Formik
-                    initialValues={initialValue}
-                    validationSchema={validationSchema}
-                    onSubmit={handleLogin}
-                >
-                    <Form>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <Field name="email" type="text" className="form-control" />
-                            <ErrorMessage
-                                name="email"
-                                component="span"
-                            />
-                        </div>
+        <div className="container">
+            <h1></h1>
+            <div className="col-md-6">
+                <div className="card card-container" style={{justifyContent: 'center'}}>
+                    <Formik
+                        initialValues={initialValue}
+                        validationSchema={validationSchema}
+                        onSubmit={handleLogin}
+                    >
+                        <Form>
+                            <div className="custom-input form-group">
+                                <label htmlFor="email">Email</label>
+                                <Field name="email" type="text" className="form-control"/>
+                                <ErrorMessage
+                                    name="email"
+                                    render={msg => <div className="error alert alert-danger" role="alert">{msg}</div>}
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label htmlFor="password">Password</label>
-                            <Field name="password" type="password" className="form-control" />
-                            <ErrorMessage
-                                name="password"
-                                component="span"
-                            />
-                        </div>
+                            <div className="custom-input form-group">
+                                <label htmlFor="password">Password</label>
+                                <Field name="password" type="password" className="form-control"/>
+                                <ErrorMessage
+                                    name="password"
+                                    render={msg => <div className="error alert alert-danger" role="alert">{msg}</div>}
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-                                {loading && (
-                                    <span className="spinner-border spinner-border-sm"></span>
-                                )}
-                                <span>Login</span>
-                            </button>
-                        </div>
+                            <div className="form-group col-md-3 margin-button">
+                                <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+                                    {loading && (
+                                        <span className="spinner-border spinner-border-sm"></span>
+                                    )}
+                                    <span>Login</span>
+                                </button>
+                            </div>
 
-                        {message && (
-                            <span>{message}</span>
-                        )}
-                    </Form>
-                </Formik>
+                            {message && (
+                                <span>{message}</span>
+                            )}
+                        </Form>
+                    </Formik>
+                </div>
             </div>
         </div>
     );

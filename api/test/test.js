@@ -1,16 +1,10 @@
 const server = require('../app/index.js')
-const userService = require('../app/business/user.manager')
-const supertest = require('supertest')
 const postSchema = require('../app/model/postModel')
 import userSchema from '../app/model/userModel'
-import business from '../app/business/business.container';
 import userDAO from "../app/DAO/userDAO";
 import postDAO from "../app/DAO/postDAO";
-import config from '../app/config';
 import applicationException from '../app/service/applicationException';
 import { emailValidator } from "../app/service/inputValidator";
-
-import mongoose, {models} from 'mongoose';
 
 test('should fail in get all users, where token is missing', async function () {
     const options = {
@@ -33,7 +27,7 @@ test('should return OK, during return list all posts', async function () {
     await expect(data.statusCode).toBe(200);
 })
 
-test('should return user, during return user data', async function () {
+test('should return user', async function () {
 
     const expectedUser = {
         "_id": "61c5bb18bce3013de2f15cbf",
@@ -65,7 +59,7 @@ test('should return error, if username already exist', async function () {
     })).rejects.toStrictEqual(applicationException.new(applicationException.NOT_FOUND, 'post not found'))
 })
 
-test('should return error, if username already exist', async function () {
+test('should return ok, if user deleted', async function () {
     postSchema.findOne = jest.fn().mockReturnValueOnce({
             _id: "61dde497c20384b7d737bf50",
             user:{
@@ -89,7 +83,7 @@ test('should return error, if username already exist', async function () {
     })).resolves.toBe("ok")
 })
 
-test('should return error, if username already exist i arr likes', async function () {
+test('should return error, if username already lick the same post', async function () {
     postSchema.findOne = jest.fn().mockReturnValueOnce({
         likes: ['61a7f228ff0ebed3f7678f32']
     })
@@ -105,7 +99,7 @@ test('should return error, if username already exist i arr likes', async functio
     })).rejects.toStrictEqual(applicationException.new(applicationException.ERROR, 'Post already licked by this user'))
 })
 
-test('should return error, if username already exist i arr likes', async function () {
+test('should return error, email is wrong', async function () {
     expect(emailValidator('szymon@gmail.com')).toBe(true)
 })
 
