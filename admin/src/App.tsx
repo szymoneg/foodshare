@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 import DetailPage from "./pages/main-page/DetailPage";
 import LogsPage from "./pages/main-page/LogsPage";
+import AddUserPage from "./pages/main-page/AddUserPage";
 
 function App(): JSX.Element {
     return <div>
@@ -32,6 +33,9 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="/logs">
                     <LogsPage />
+                </Route>
+                <Route path="/add">
+                    <AddUserPage />
                 </Route>
             </Switch>
         </Router>

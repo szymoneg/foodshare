@@ -24,6 +24,10 @@ async function getAll(request) {
                 select: 'username email'
             }
         }])
+        .populate([{
+            path: 'likes',
+            select: 'user username',
+        }])
     if (result) {
         return result;
     }
@@ -50,8 +54,6 @@ async function getPost(request) {
     if (post){
         return post;
     }
-
-    // throw new Error("post not found")
 
     throw applicationException.new(applicationException.NOT_FOUND, "post not found")
 }
@@ -156,7 +158,7 @@ async function getUserPost(request){
     const user = await UserModel.findOne({username: username})
     const post = await PostModel.find({user: user._id}).populate({
         path: 'user',
-        select: 'username email'
+        select: 'username email name surname'
     })
     if (post){
         return post;
