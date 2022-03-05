@@ -1,0 +1,19 @@
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+.error{
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.custom-input{
+    margin: 10px;
+}
+
+.margin-button{
+    padding-left: 10px !important;
+}

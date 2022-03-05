@@ -5,4 +5,5 @@ export interface UserModel{
     isAdmin?: boolean;
     name?: string;
     role?: string;
+    username?: string;
 }

@@ -73,6 +73,7 @@ const postEndpoint = {
             handler: async(request, h) => {
                 try{
                     logger.info("Create new post")
+                    console.log(request)
                     return await business.getPostManager(request).createPost(request);
                 }catch(error){
                     logger.error("Create new post - error")
