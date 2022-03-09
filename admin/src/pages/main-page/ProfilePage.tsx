@@ -111,6 +111,13 @@ const ProfilePage = (props: any) => {
         })
     }
 
+    const handleEdit = (id: any) => {
+        history.push({
+            pathname: `/details/${id}`,
+            state: {id: id}
+        })
+    }
+
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
     };
@@ -219,7 +226,7 @@ const ProfilePage = (props: any) => {
                                                 {columns.map((column) => {
                                                     const value = row[column.id];
                                                     return (
-                                                        <TableCell key={column.id} align={column.align} onClick={() => console.log(value)}>
+                                                        <TableCell key={column.id} align={column.align} onClick={() => handleEdit(value)}>
                                                             {column.id === 'isAdmin' ? (row.isAdmin ? <CheckCircleIcon/> : <CancelIcon/>) : value }
                                                         </TableCell>
                                                     );

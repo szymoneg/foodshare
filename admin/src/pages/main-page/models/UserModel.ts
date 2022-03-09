@@ -6,4 +6,5 @@ export interface UserModel{
     name?: string;
     role?: string;
     username?: string;
+    surname?: string;
 }

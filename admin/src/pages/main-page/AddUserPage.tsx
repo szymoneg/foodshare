@@ -1,21 +1,11 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import GroupIcon from '@mui/icons-material/Group';
-import StorageIcon from '@mui/icons-material/Storage';
-import LogoutIcon from '@mui/icons-material/Logout';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import WarningIcon from '@mui/icons-material/Warning';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
@@ -23,103 +13,48 @@ import * as React from 'react';
 
 
 import {useEffect, useState} from "react";
-import AuthService from "../../services/auth.service";
 import {UserModel} from "./models/UserModel";
 import {useHistory, withRouter} from 'react-router-dom'
 import "./MainPageStyle.css"
+import DrawerCustom from "./components/DrawerCustom";
+import {useLocation} from "react-router";
+import {SelectChangeEvent} from "@mui/material";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const drawerWidth = 340;
 
+
 const AddUserPage = (props: any) => {
-    let pageName: string = "Lista użytkowników"
+    let pageName: string = "Edycja użytkownika"
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
     const {window} = props;
+    const { state } = useLocation<UserModel>();
 
     const [redirect, setRedirect] = useState('');
     const [userReady, setUserReady] = useState(false);
-    const [currentUser, setCurrentUser] = useState<Partial<UserModel>>({});
-    const [users, setUsers] = useState<UserModel[] | []>([]);
+    const [role, setRole] = useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setRole(event.target.value as string);
+    };
 
     let history = useHistory();
 
     useEffect(() => {
-
+        console.log(state);
     }, [])
 
-
-    const handleLogout = () => {
-        history.push('/login')
-        AuthService.logout();
-    }
-
-    const handleEdit = (id: any) => {
-        history.push({
-            pathname: `/details/${id}`,
-            state: {id: id}
-        })
-    }
-
-    const handleAdd = () => {
-        history.push({
-            pathname: "/add"
-        })
-    }
-
-    const handleShowLog = () => {
-        history.push({
-            pathname: "/logs"
-        })
-    }
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
-    const drawer = (
-        <div>
-            <Toolbar/>
-            <Divider/>
-            <List>
-                <ListItem button onClick={handleAdd}>
-                    <ListItemIcon>
-                        <GroupIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Lista użytkowników'}/>
-                </ListItem>
-
-                <ListItem button onClick={handleShowLog}>
-                    <ListItemIcon>
-                        <StorageIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Lista logów'}/>
-                </ListItem>
-
-                <ListItem button onClick={handleShowLog}>
-                    <ListItemIcon>
-                        <WarningIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Zgłoszenia'}/>
-                </ListItem>
-
-                <ListItem button onClick={handleShowLog}>
-                    <ListItemIcon>
-                        <CheckCircleOutlineIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Administratorzy'}/>
-                </ListItem>
-            </List>
-            <Divider/>
-            <List>
-                <ListItem button onClick={handleLogout}>
-                    <ListItemIcon>
-                        <LogoutIcon/>
-                    </ListItemIcon>
-                    <ListItemText primary={'Wyloguj się'}/>
-                </ListItem>
-            </List>
-        </div>
-    );
+    const drawer = (<DrawerCustom/>);
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -196,31 +131,50 @@ const AddUserPage = (props: any) => {
                         '& > :not(style)': { m: 1 },
                     }}
                 >
-                    <TextField
-                        helperText="Podaj nazwe nowego użytkwnika"
-                        id="demo-helper-text-aligned"
-                        label="Nazwa użytkownika"
-                    />
+                    <FormGroup>
+                        <TextField
+                            helperText=" "
+                            id="demo-helper-text-aligned"
+                            label="Nazwa użytkownika"
+                            value={state.username}
+                        />
 
-                    <TextField
-                        helperText="Podaj email nowego użytkwnika"
-                        id="demo-helper-text-aligned"
-                        label="E-mail"
-                    />
+                        <TextField
+                            helperText=" "
+                            id="demo-helper-text-aligned"
+                            label="E-mail"
+                            value={state.email}
+                        />
 
-                    <TextField
-                        helperText="Po stworzeniu konta poinformować użytkownika o zmianie hasła"
-                        id="demo-helper-text-aligned"
-                        label="Hasło"
-                    />
+                        <TextField
+                            helperText=" "
+                            id="demo-helper-text-aligned"
+                            label="Imię"
+                            value={state?.name}
+                        />
 
-                    <TextField
-                        helperText=""
-                        id="demo-helper-text-aligned"
-                        label="Powtórz hasło"
-                    />
+                        <TextField
+                            helperText=" "
+                            id="demo-helper-text-aligned"
+                            label="Nazwisko"
+                            value={state?.surname}
+                        />
 
-                    <Button variant="contained" onClick={() => history.push('/main-page')}>Utwórz</Button>
+                        <TextField
+                            id="demo-simple-select"
+                            value={state?.role}
+                            select
+                            label="Rola"
+                        >
+                            <MenuItem value={'user'}>Użytkownik</MenuItem>
+                            <MenuItem value={'admin'}>Administrator</MenuItem>
+                            <MenuItem value={'mod'}>Moderator</MenuItem>
+                        </TextField>
+
+                        <FormControlLabel sx={{marginTop: 2}} control={<Checkbox />} label="Status konta" />
+                    </FormGroup>
+
+                    <Button variant="contained" onClick={() => history.push('/main-page')}>Edytuj</Button>
                 </Box>
             </Box>
         </Box>

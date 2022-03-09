@@ -1,4 +1,3 @@
-import { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import LoginPage from "./pages/login-page/LoginPage";
@@ -35,6 +34,9 @@ function App(): JSX.Element {
                     <LogsPage />
                 </Route>
                 <Route path="/add">
+                    <AddUserPage />
+                </Route>
+                <Route path="/edit/:id">
                     <AddUserPage />
                 </Route>
             </Switch>
